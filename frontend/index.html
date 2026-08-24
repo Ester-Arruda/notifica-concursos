@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⭐ Monitor de Concursos</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        .container {
+            width: min(420px, calc(100% - 32px));
+            margin: 60px auto;
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            margin: 0 0 24px;
+            text-align: center;
+            font-size: 22px;
+        }
+
+        label {
+            display: block;
+            margin: 16px 0 7px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="number"],
+        input[type="email"] {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .estados {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .estado {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .estado input {
+            width: auto;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 24px;
+            padding: 12px;
+            border: 0;
+            border-radius: 7px;
+            background: #222;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #444;
+        }
+
+        #mensagem {
+            margin-top: 14px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>⭐ Monitor de Concursos</h1>
+
+    <form id="formulario">
+
+        <label for="salario">
+            Salário mínimo
+        </label>
+
+        <input
+            id="salario"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="Ex.: 5000"
+        >
+
+        <label>
+            Estados
+        </label>
+
+        <div class="estados">
+
+            <label class="estado">
+                <input type="checkbox" value="AC"> AC
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="AL"> AL
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="AP"> AP
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="AM"> AM
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="BA"> BA
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="CE"> CE
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="DF"> DF
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="ES"> ES
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="GO"> GO
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="MA"> MA
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="MT"> MT
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="MS"> MS
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="MG"> MG
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="PA"> PA
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="PB"> PB
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="PR"> PR
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="PE"> PE
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="PI"> PI
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="RJ"> RJ
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="RN"> RN
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="RS"> RS
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="RO"> RO
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="RR"> RR
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="SC"> SC
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="SP"> SP
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="SE"> SE
+            </label>
+
+            <label class="estado">
+                <input type="checkbox" value="TO"> TO
+            </label>
+
+        </div>
+
+        <label for="email">
+            E-mail
+        </label>
+
+        <input
+            id="email"
+            type="email"
+            placeholder="seu@email.com"
+        >
+
+        <button type="submit">
+            Salvar filtros
+        </button>
+
+        <div id="mensagem"></div>
+
+    </form>
+
+</div>
+
+<script>
+    const formulario = document.getElementById("formulario");
+    const salario = document.getElementById("salario");
+    const email = document.getElementById("email");
+    const mensagem = document.getElementById("mensagem");
+
+    const estados = document.querySelectorAll(
+        ".estado input"
+    );
+
+    async function carregarFiltros() {
+
+        try {
+
+            const resposta = await fetch("/filters");
+
+            if (!resposta.ok) {
+                throw new Error(
+                    "Não foi possível carregar os filtros."
+                );
+            }
+
+            const filtros = await resposta.json();
+
+            salario.value =
+                filtros.salario_minimo ?? "";
+
+            email.value =
+                filtros.email ?? "";
+
+            const estadosSalvos =
+                filtros.estado ?? [];
+
+            estados.forEach((checkbox) => {
+
+                checkbox.checked =
+                    estadosSalvos.includes(
+                        checkbox.value
+                    );
+
+            });
+
+        } catch (erro) {
+
+            mensagem.textContent =
+                erro.message;
+
+        }
+    }
+
+    formulario.addEventListener(
+        "submit",
+        async (event) => {
+
+            event.preventDefault();
+
+            mensagem.textContent =
+                "Salvando...";
+
+            const estadosSelecionados =
+                [...estados]
+                    .filter(
+                        (checkbox) =>
+                            checkbox.checked
+                    )
+                    .map(
+                        (checkbox) =>
+                            checkbox.value
+                    );
+
+            const dados = {
+
+                salario_minimo:
+                    salario.value === ""
+                        ? null
+                        : Number(salario.value),
+
+                estado:
+                    estadosSelecionados.length > 0
+                        ? estadosSelecionados
+                        : null,
+
+                email:
+                    email.value || null
+            };
+
+            try {
+
+                const resposta = await fetch(
+                    "/filters",
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify(dados)
+                    }
+                );
+
+                if (!resposta.ok) {
+
+                    const erro =
+                        await resposta
+                            .json()
+                            .catch(() => null);
+
+                    throw new Error(
+                        erro?.detail
+                            ? JSON.stringify(
+                                erro.detail
+                            )
+                            : "Erro ao salvar os filtros."
+                    );
+                }
+
+                mensagem.textContent =
+                    "⭐ Filtros salvos com sucesso!";
+
+            } catch (erro) {
+
+                mensagem.textContent =
+                    erro.message;
+            }
+        }
+    );
+
+    carregarFiltros();
+</script>
+
+</body>
+</html>
