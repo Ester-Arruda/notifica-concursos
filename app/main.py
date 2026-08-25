@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-from app.api import filters, scraper
+from app.api import filters, scraper, admin
 from app.database.database import init_db
 
 logging.basicConfig(level=logging.INFO)
@@ -32,6 +32,7 @@ def on_startup():
 
 app.include_router(filters.router)
 app.include_router(scraper.router)
+app.include_router(admin.router)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = BASE_DIR / "frontend"
