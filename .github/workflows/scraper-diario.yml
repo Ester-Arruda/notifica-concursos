@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Chamar endpoint do scraper
-        run: curl -X POST https://sua-app.onrender.com/scraper/run
+        run: curl -X GET https://concurso-monitor-9pm1.onrender.com/scraper/run
