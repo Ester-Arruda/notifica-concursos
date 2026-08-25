@@ -22,8 +22,4 @@ class Settings(BaseSettings):
     resend_api_key: str = ""
     email_from: str = "Monitor de Concursos <notificacoes@seudominio.com>"
 
-    # Protecao simples do endpoint de execucao do scraper (chamado pelo cron)
-    cron_secret: str = ""
-
-
 settings = Settings()
