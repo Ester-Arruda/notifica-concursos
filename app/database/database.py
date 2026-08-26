@@ -7,12 +7,17 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 
 from app.config import settings
 
-# check_same_thread=False e necessario porque o FastAPI/uvicorn pode
-# acessar a conexao a partir de threads diferentes (SQLite por padrao
-# so permite acesso pela thread que criou a conexao).
-connect_args = {"check_same_thread": False} if settings.database_url.startswith("sqlite") else {}
+connect_args = {}
+db_url = settings.database_url
 
-engine = create_engine(settings.database_url, connect_args=connect_args)
+if settings.turso_database_url and settings.turso_auth_token:
+    hostname = settings.turso_database_url.replace("libsql://", "")
+    db_url = f"sqlite+libsql://{hostname}?secure=true"
+    connect_args = {"auth_token": settings.turso_auth_token}
+elif settings.database_url.startswith("sqlite"):
+    connect_args = {"check_same_thread": False}
+
+engine = create_engine(db_url, connect_args=connect_args)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

@@ -1,10 +1,3 @@
-"""
-Configuracoes da aplicacao, carregadas de variaveis de ambiente (.env).
-
-Centralizar aqui evita espalhar os.getenv(...) pelo codigo e facilita
-trocar valores (ex: URL do PCI, retencao em dias) em um unico lugar,
-conforme RNF03 (manutencao).
-"""
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -13,7 +6,9 @@ class Settings(BaseSettings):
 
     # Banco de dados
     database_url: str = "sqlite:///./concurso_monitor.db"
-
+    turso_database_url: str | None = None
+    turso_auth_token: str | None = None
+    
     # Scraper
     pci_base_url: str = "https://www.pciconcursos.com.br/concursos/"
     retencao_dias: int = 90  # ~3 meses (RN16 / RF14)
