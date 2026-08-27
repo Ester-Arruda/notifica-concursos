@@ -1,0 +1,18 @@
+name: Manter aplicação acordada
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Ping simples no serviço
+        run: |
+          curl --max-time 90 \
+               --connect-timeout 90 \
+               --retry 2 \
+               https://concurso-monitor-9pm1.onrender.com/ || true
