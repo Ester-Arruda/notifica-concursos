@@ -2,7 +2,7 @@ name: Rodar scraper de concursos
 
 on:
   schedule:
-    - cron: "10 14 * * *"
+    - cron: "30 14 * * *"
   workflow_dispatch:
 
 jobs:
