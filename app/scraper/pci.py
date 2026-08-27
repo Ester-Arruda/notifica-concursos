@@ -138,7 +138,7 @@ def _parse_item(item: Tag) -> Optional[Concurso]:
 
 
 def buscar_concursos() -> list[Concurso]:
-    with httpx.Client(headers=HEADERS, timeout=30, follow_redirects=True) as client:
+    with httpx.Client(headers=HEADERS, timeout=90, follow_redirects=True) as client:
         resposta = client.get("https://www.pciconcursos.com.br/concursos/")
         resposta.raise_for_status()
 
